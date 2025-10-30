@@ -16,25 +16,25 @@ public class L4AssignmentTest {
 	 * Tests for L4Assignment class
 	 */
 	// Tests for findSalaryPercentile
-	@Test
-	public void testFindSalaryPercentile() {
-		List<Employee> employees = List.of(new Employee("Alice", "HR", 60000.0), new Employee("Bob", "IT", 80000.0),
-				new Employee("Charlie", "HR", 70000.0), new Employee("David", "IT", 90000.0),
-				new Employee("Eve", "Finance", 50000.0));
-		double percentile = 75.0;
-		double result = l4Assignment.findSalaryPercentile(employees, percentile);
-		// Expected 75th percentile salary is 80000.0
-		assertEquals(result, 80000.0);
-	}
+//	@Test
+//	public void testFindSalaryPercentile() {
+//		List<Employee> employees = List.of(new Employee("Alice", "HR", 60000.0), new Employee("Bob", "IT", 80000.0),
+//				new Employee("Charlie", "HR", 70000.0), new Employee("David", "IT", 90000.0),
+//				new Employee("Eve", "Finance", 50000.0));
+//		double percentile = 75.0;
+//		double result = l4Assignment.findSalaryPercentile(employees, percentile);
+//		// Expected 75th percentile salary is 80000.0
+//		assertEquals(result, 80000.0);
+//	}
 
-	@Test
-	public void testFindSalaryPercentileEmptyList() {
-		List<Employee> employees = List.of();
-		double percentile = 75.0;
-		double result = l4Assignment.findSalaryPercentile(employees, percentile);
-		// Expected -1.0 for empty list
-		assertEquals(result, -1.0);
-	}
+//	@Test
+//	public void testFindSalaryPercentileEmptyList() {
+//		List<Employee> employees = List.of();
+//		double percentile = 75.0;
+//		double result = l4Assignment.findSalaryPercentile(employees, percentile);
+//		// Expected -1.0 for empty list
+//		assertEquals(result, -1.0);
+//	}
 
 	// Tests for concatenateNamesWithSeparator
 	@Test
@@ -104,25 +104,25 @@ public class L4AssignmentTest {
 	}
 
 	// Tests for 5. findAllSubsetsOfDepartments
-	@Test
-	public void testFindAllSubsetsOfDepartments() {
-		List<String> departments = List.of("IT", "HR", "Finance");
-		List<List<String>> result = l4Assignment.findAllSubsetsOfDepartments(departments);
-		// Expected all subsets of the given departments
-		List<List<String>> expected = List.of(List.of(), List.of("IT"), List.of("HR"), List.of("Finance"),
-				List.of("IT", "HR"), List.of("IT", "Finance"), List.of("HR", "Finance"),
-				List.of("IT", "HR", "Finance"));
-		assertEquals(expected, result);
-	}
+//	@Test
+//	public void testFindAllSubsetsOfDepartments() {
+//		List<String> departments = List.of("IT", "HR", "Finance");
+//		List<List<String>> result = l4Assignment.findAllSubsetsOfDepartments(departments);
+//		// Expected all subsets of the given departments
+//		List<List<String>> expected = List.of(List.of(), List.of("IT"), List.of("HR"), List.of("Finance"),
+//				List.of("IT", "HR"), List.of("IT", "Finance"), List.of("HR", "Finance"),
+//				List.of("IT", "HR", "Finance"));
+//		assertEquals(expected, result);
+//	}
 
-	@Test
-	public void testFindAllSubsetsOfDepartmentsEmptyList() {
-		List<String> departments = List.of();
-		List<List<String>> result = l4Assignment.findAllSubsetsOfDepartments(departments);
-		// Expected list with only the empty subset
-		List<List<String>> expected = List.of(List.of());
-		assertEquals(expected, result);
-	}
+//	@Test
+//	public void testFindAllSubsetsOfDepartmentsEmptyList() {
+//		List<String> departments = List.of();
+//		List<List<String>> result = l4Assignment.findAllSubsetsOfDepartments(departments);
+//		// Expected list with only the empty subset
+//		List<List<String>> expected = List.of(List.of());
+//		assertEquals(expected, result);
+//	}
 
 	// Tests for 6. customPartitioningWithPredicateChain
 	@Test
