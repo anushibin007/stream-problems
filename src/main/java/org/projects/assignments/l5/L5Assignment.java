@@ -1,9 +1,12 @@
 package org.projects.assignments.l5;
 
+import java.util.Collections;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -290,102 +293,255 @@ public class L5Assignment {
 	}
 
 	/**
-	 * 11. ToArray - Convert Stream to Array Example: Given a list of strings,
-	 * convert to array using streams. Example: Strings: ["apple", "banana",
-	 * "cherry"] Output: ["apple", "banana", "cherry"] as String[] Explanation:
-	 * Convert stream to array.
+	 * 11. ToArray - Convert Stream to Array
+	 * 
+	 * Example: Given a list of strings, convert to array using streams.
+	 * 
+	 * Example: Strings: ["apple", "banana", "cherry"]
+	 * 
+	 * Output: ["apple", "banana", "cherry"] as String[] Explanation: Convert stream
+	 * to array.
 	 */
 	public String[] streamToArray(List<String> strings) {
-		return null;
+
+		return strings //
+				.stream() //
+				.toArray(String[]::new);
+
 	}
 
 	/**
-	 * 12. Reducing Collector - Concatenate Strings with Reduce Example: Given a
-	 * list of strings, concatenate them using reduce. Example: Strings: ["Java",
-	 * "is", "fun"] Output: "Java is fun" Explanation: Concatenate strings with
-	 * space separator.
+	 * 12. Reducing Collector -
+	 * 
+	 * Concatenate Strings with Reduce
+	 * 
+	 * Example: Given a list of strings, concatenate them using reduce.
+	 * 
+	 * Example: Strings: ["Java", "is", "fun"]
+	 * 
+	 * Output: "Java is fun"
+	 * 
+	 * Explanation: Concatenate strings with space separator.
 	 */
 	public String concatenateWithReduce(List<String> strings) {
-		return null;
+
+		return strings //
+				.stream() //
+				.reduce((a, b) -> String.join(" ", a, b)) //
+//		.reduce((a, b) -> a + " " + b) // this also works
+				.orElse("");
+
 	}
 
 	/**
-	 * 13. Teeing Collector - Calculate Both Sum and Count Example: Given a list of
-	 * integers, calculate both sum and count simultaneously. Example: Numbers: [10,
-	 * 20, 30, 40] Output: {sum=100, count=4} Explanation: Perform two operations in
-	 * one pass (Java 12+).
+	 * 13. Teeing Collector - Calculate Both Sum and Count
+	 * 
+	 * Example: Given a list of integers, calculate both sum and count
+	 * simultaneously.
+	 * 
+	 * Example: Numbers: [10, 20, 30, 40]
+	 * 
+	 * Output: {sum=100, count=4} Explanation: Perform two operations in one pass
+	 * (Java 12+).
 	 */
 	public Map<String, Integer> sumAndCount(List<Integer> numbers) {
-		return null;
+
+		return numbers //
+				.stream() //
+				.collect( //
+						Collectors.teeing( //
+								Collectors.summingInt(Integer::intValue), // C1
+								Collectors.counting(), // C2
+								(sum, count) -> { // Merger
+									return Map.of("sum", sum, "count", count.intValue()); //
+								}));
+
 	}
 
 	/**
-	 * 14. Filtering Downstream Collector - Group and Filter Example: Given a list
-	 * of numbers, group by even/odd and keep only numbers > 5. Example: Numbers:
-	 * [1, 2, 6, 7, 8, 10, 3] Output: {false=[7], true=[6, 8, 10]} Explanation:
-	 * Group by even/odd, then filter to keep only numbers > 5.
+	 * 14. Filtering Downstream Collector -
+	 * 
+	 * Group and Filter
+	 * 
+	 * Example: Given a list of numbers, group by even/odd and keep only numbers >
+	 * 5.
+	 * 
+	 * Example: Numbers: [1, 2, 6, 7, 8, 10, 3]
+	 * 
+	 * Output: {false=[7], true=[6, 8, 10]}
+	 * 
+	 * Explanation: Group by even/odd, then filter to keep only numbers > 5.
 	 */
 	public Map<Boolean, List<Integer>> groupAndFilter(List<Integer> numbers) {
-		return null;
+
+		return numbers.stream()
+//		.filter(num -> num > 5) // naive solution
+				.collect(Collectors.groupingBy( //
+						num -> num % 2 == 0, //
+						Collectors.collectingAndThen( //
+								Collectors.toList(), //
+								list -> list //
+										.stream() //
+										.filter(num -> num > 5) //
+										.toList() //
+						)));
+
 	}
 
 	/**
-	 * 15. Mapping Downstream Collector - Group Strings and Get Lengths Example:
-	 * Given list of strings, group by first character and collect their lengths.
+	 * 15. Mapping Downstream Collector
+	 * 
+	 * Group Strings and Get Lengths
+	 * 
+	 * Example: Given list of strings, group by first character and collect their
+	 * lengths.
+	 * 
+	 * 
 	 * Example: Strings: ["apple", "apricot", "banana", "cherry"] Output: {a=[5, 7],
-	 * b=[6], c=[6]} Explanation: Group by first character, map to lengths.
+	 * b=[6], c=[6]}
+	 * 
+	 * Explanation: Group by first character, map to lengths.
 	 */
 	public Map<Character, List<Integer>> groupByFirstCharAndMapToLength(List<String> strings) {
-		return null;
+
+		return strings.stream().collect(Collectors.groupingBy(str -> str.charAt(0), //
+				Collectors.collectingAndThen( //
+						Collectors.toList(), //
+						list -> list.stream().map(String::length).toList() //
+				) //
+		) //
+		);
+
 	}
 
 	/**
-	 * 16. SummarizingInt - Get Statistics for Numbers Example: Given a list of
-	 * integers, get count, sum, min, max, and average. Example: Numbers: [10, 20,
-	 * 30, 40, 50] Output: IntSummaryStatistics{count=5, sum=150, min=10,
-	 * average=30.0, max=50} Explanation: Get all statistics at once.
+	 * 16. SummarizingInt -
+	 * 
+	 * Get Statistics for Numbers
+	 * 
+	 * Example: Given a list of integers, get count, sum, min, max, and average.
+	 * Example: Numbers: [10, 20, 30, 40, 50]
+	 * 
+	 * Output: IntSummaryStatistics{count=5, sum=150, min=10, average=30.0, max=50}
+	 * 
+	 * Explanation: Get all statistics at once.
 	 */
 	public IntSummaryStatistics getStatistics(List<Integer> numbers) {
-		return null;
+
+		return numbers //
+				.stream() //
+				.collect(Collectors.summarizingInt(Integer::intValue));
 	}
 
 	/**
-	 * 17. CollectingAndThen - Group and Get Unmodifiable Map Example: Given
-	 * strings, group by length and return unmodifiable map. Example: Strings:
-	 * ["cat", "dog", "apple", "kiwi"] Output: {3=[cat, dog], 4=[kiwi], 5=[apple]}
-	 * (unmodifiable) Explanation: Post-process the collected result.
+	 * 17. CollectingAndThen -
+	 * 
+	 * Group and Get Unmodifiable
+	 * 
+	 * Map Example: Given strings, group by length and return unmodifiable map.
+	 * 
+	 * Example: Strings: ["cat", "dog", "apple", "kiwi"]
+	 * 
+	 * Output: {3=[cat, dog], 4=[kiwi], 5=[apple]} (unmodifiable)
+	 * 
+	 * Explanation: Post-process the collected result.
 	 */
 	public Map<Integer, List<String>> groupByLengthUnmodifiable(List<String> strings) {
-		return null;
+
+		return strings //
+				.stream() //
+				.collect(Collectors.collectingAndThen(Collectors.groupingBy(String::length),
+						Collections::unmodifiableMap));
+
 	}
 
 	/**
-	 * 18. FlatMapToInt - Flatten and Convert to IntStream Example: Given a list of
-	 * lists of integers, flatten and sum all numbers. Example: Nested: [[1, 2], [3,
-	 * 4], [5]] Output: 15 Explanation: Flatten and convert to IntStream, then sum.
+	 * 18. FlatMapToInt - Flatten and Convert to IntStream
+	 * 
+	 * Example: Given a list of lists of integers, flatten and sum all numbers.
+	 * 
+	 * Example:
+	 * 
+	 * Nested: [[1, 2], [3, 4], [5]]
+	 * 
+	 * Output: 15 Explanation: Flatten and convert to IntStream, then sum.
 	 */
 	public int flattenAndSum(List<List<Integer>> nestedLists) {
-		return -1;
+
+		return nestedLists //
+				.stream() //
+				.flatMap(list -> list.stream()) //
+				.mapToInt(Integer::valueOf)
+				// naive implementation without flatmaps
+//				.mapToInt(list -> //
+//				list //
+//						.stream() //
+//						.mapToInt(Integer::intValue) //
+//						.sum() //
+//				) //
+				.sum();
+
 	}
 
 	/**
-	 * 19. Multi-level Grouping with Counting - Group by Two Criteria Example: Given
-	 * strings, group by length, then by first character, and count. Example:
-	 * Strings: ["apple", "apricot", "cat", "dog", "kiwi"] Output: {3={c=1, d=1},
-	 * 4={k=1}, 5={a=1}, 7={a=1}} Explanation: First group by length, then by first
-	 * character, then count occurrences.
+	 * 19. Multi-level Grouping with Counting -
+	 * 
+	 * Group by Two Criteria
+	 * 
+	 * Example: Given strings, group by length, then by first character, and count.
+	 * 
+	 * Example: Strings: ["apple", "apricot", "cat", "dog", "kiwi"]
+	 * 
+	 * Output: {3={c=1, d=1}, 4={k=1}, 5={a=1}, 7={a=1}}
+	 * 
+	 * Explanation: First group by length, then by first character, then count
+	 * occurrences.
 	 */
 	public Map<Integer, Map<Character, Long>> multiLevelGrouping(List<String> strings) {
-		return null;
+
+		return strings //
+				.stream() //
+				.collect( //
+						Collectors.groupingBy( //
+								String::length, //
+								Collectors.groupingBy(s -> s.charAt(0), //
+										Collectors.counting() //
+								) //
+						) //
+				);
+
 	}
 
 	/**
-	 * 20. Custom Collector - Collect to StringBuilder Example: Given a list of
-	 * strings, collect them into StringBuilder with custom separator. Example:
-	 * Strings: ["Hello", "World", "Java"] Output: "Hello | World | Java"
+	 * 20. Custom Collector - Collect to StringBuilder
+	 * 
+	 * Example: Given a list of strings, collect them into StringBuilder with custom
+	 * separator.
+	 * 
+	 * Example: Strings: ["Hello", "World", "Java"]
+	 * 
+	 * Output: "Hello | World | Java"
+	 * 
 	 * Explanation: Create custom collector that uses StringBuilder.
 	 */
 	public String customCollectorWithStringBuilder(List<String> strings, String separator) {
-		return null;
+
+		Collector<String, StringBuilder, String> customCollector = Collector.of( //
+				StringBuilder::new // supplier
+				, (sb, s) -> { // accumulator
+					if (sb.length() > 0) {
+						sb.append(separator);
+					}
+					sb.append(s);
+				}, (sb1, sb2) -> { // combiner
+					if (sb1.length() > 0 && sb2.length() > 0) {
+						sb1.append(separator);
+					}
+					sb1.append(sb2);
+					return sb1;
+				}, StringBuilder::toString // finisher
+		);
+
+		return strings.stream().collect(customCollector);
 	}
 }
