@@ -1,5 +1,6 @@
 package org.projects.assignments.l5;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -141,7 +142,7 @@ class L5AssignmentTest {
 		List<String> input = List.of("apple", "banana", "cherry");
 		String[] expected = { "apple", "banana", "cherry" };
 		String[] result = l5Assignment.streamToArray(input);
-		assertEquals(expected, result);
+		assertArrayEquals(expected, result);
 	}
 
 	// Test for Question 12: Concatenate With Reduce
@@ -169,8 +170,8 @@ class L5AssignmentTest {
 		List<Integer> input = List.of(1, 2, 6, 7, 8, 10, 3);
 		Map<Boolean, List<Integer>> expected = Map.of(false, List.of(7), true, List.of(6, 8, 10));
 		Map<Boolean, List<Integer>> result = l5Assignment.groupAndFilter(input);
-		assertEquals(result.get(false), expected.get(false));
-		assertEquals(result.get(true), expected.get(true));
+		assertEquals(expected.get(false), result.get(false));
+		assertEquals(expected.get(true), result.get(true));
 	}
 
 	// Test for Question 15: Group By First Char And Map To Length
